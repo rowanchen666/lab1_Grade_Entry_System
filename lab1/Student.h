@@ -20,13 +20,13 @@ protected:
 public:
     const std::string id;
     const std::string name;
-    const Degree degree;
+    Degree degree;
     const int year;
 
     virtual double getGpa() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
     virtual double getAvgScore() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
     Student(const std::string &id, const std::string &name, const Degree degree, const int year)
-        : id(id), name(name), degree(degree), year(year) { }
+        : id(id), name(name), year(year) { }
     std::string toString() const;
     void addClass(Class *cl);
 };
@@ -34,7 +34,10 @@ public:
 // TODO: implement class Graduate.
 class Graduate : public Student {
     public:
-        Graduate(const std::string &id, const std::string &name, const int year) : Student(id, name, graduate, year) {}
+        Graduate(const std::string &id, const std::string &name, const int year) 
+            : Student(id, name, graduate, year) {
+            this->degree = graduate;
+        }
         double getGpa() const override ;
         double getAvgScore() const override ;
 };
@@ -42,7 +45,10 @@ class Graduate : public Student {
 // TODO: implement class Undergraduate.
 class Undergraduate : public Student {
     public:
-        Undergraduate(const std::string &id, const std::string &name, const int year) : Student(id, name, undergraduate, year) {}
+        Undergraduate(const std::string &id, const std::string &name, const int year) 
+            : Student(id, name, undergraduate, year) {
+            this->degree = undergraduate;
+        }
         double getGpa() const override ;
         double getAvgScore() const override ;
 };

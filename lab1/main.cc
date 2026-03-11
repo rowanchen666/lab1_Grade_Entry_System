@@ -83,12 +83,10 @@ void AppX::loadFiles()
 
         // TODO: uncomment next lines after implementing class Undergraduate
         // and Graduate.
-        /*
         if (bufv[3] == "U")
             st = new Undergraduate(bufv[0], bufv[1], bufv[2]);
         else
             st = new Graduate(bufv[0], bufv[1], bufv[2]);
-        */
 
         studentVec.push_back(st);
     }
