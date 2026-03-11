@@ -21,12 +21,12 @@ public:
     const std::string id;
     const std::string name;
     const Degree degree;
-    std::string toString() const;
+    const int year;
 
     virtual double getGpa() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
     virtual double getAvgScore() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
-    Student(const std::string &id, const std::string &name, const Degree degree)
-        : id(id), name(name), degree(degree) { }
+    Student(const std::string &id, const std::string &name, const Degree degree, const int year)
+        : id(id), name(name), degree(degree), year(year) { }
     std::string toString() const;
     void addClass(Class *cl);
 };
@@ -34,7 +34,7 @@ public:
 // TODO: implement class Graduate.
 class Graduate : public Student {
     public:
-        Graduate(const std::string &id, const std::string &name) : Student(id, name, graduate) {}
+        Graduate(const std::string &id, const std::string &name, const int year) : Student(id, name, graduate, year) {}
         double getGpa() const override ;
         double getAvgScore() const override ;
 };
@@ -42,11 +42,12 @@ class Graduate : public Student {
 // TODO: implement class Undergraduate.
 class Undergraduate : public Student {
     public:
-        Undergraduate(const std::string &id, const std::string &name) : Student(id, name, undergraduate) {}
+        Undergraduate(const std::string &id, const std::string &name, const int year) : Student(id, name, undergraduate, year) {}
         double getGpa() const override ;
         double getAvgScore() const override ;
 };
 
+//this class is used to wrap a student in a class, which contains the score of the student in the class.
 class StudentWrapper {
 private:
     const Student &student;
