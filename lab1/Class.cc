@@ -3,6 +3,8 @@
 #include <vector>
 #include "Student.h"
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 std::string Class::toString() const {
     std::ostringstream oss;
@@ -66,5 +68,24 @@ double Class::getAvgScore() {
 
 void Class::saveScore(const std::string& filename) {
     // TODO implement saveScore
+    std::ofstream outFile(filename, std::ios::app);
+    if (!outFile.is_open()) {
+        std::cerr << "Error: Cannot open " << filename << " for writing" << std::endl;
+        return;
+    }
     
+    // Always output the class name
+    outFile << name << std::endl;
+    
+    // Output valid scores only
+    for (std::vector<StudentWrapper>::iterator it = students.begin();
+         it != students.end();
+         ++it) {
+        double score = it->getScore();
+        if (score >= 0) {
+            outFile << it->id << "," << static_cast<int>(score) << std::endl;
+        }
+    }
+    
+    outFile.close();
 }
