@@ -16,15 +16,36 @@ class Student {
 private:
 
 protected:
-
+    std::vector<Class *> classes;
 public:
     const std::string id;
+    const std::string name;
+    const Degree degree;
     std::string toString() const;
+
+    virtual double getGpa() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
+    virtual double getAvgScore() const = 0; // Pure Virtual Function, which means Student is an Abstract Class.
+    Student(const std::string &id, const std::string &name, const Degree degree)
+        : id(id), name(name), degree(degree) { }
+    std::string toString() const;
+    void addClass(Class *cl);
 };
 
 // TODO: implement class Graduate.
+class Graduate : public Student {
+    public:
+        Graduate(const std::string &id, const std::string &name) : Student(id, name, graduate) {}
+        double getGpa() const override ;
+        double getAvgScore() const override ;
+};
 
 // TODO: implement class Undergraduate.
+class Undergraduate : public Student {
+    public:
+        Undergraduate(const std::string &id, const std::string &name) : Student(id, name, undergraduate) {}
+        double getGpa() const override ;
+        double getAvgScore() const override ;
+};
 
 class StudentWrapper {
 private:
@@ -33,10 +54,7 @@ private:
 public:
     const std::string id;
     // TODO: fix error
-    StudentWrapper(const std::string &id, const Student &student) {
-        this->id = id;
-        this->student = student;
-    }
+    StudentWrapper(const std::string &id, const Student &student) : id(id), student(student) {}
 
     void setScore(double score)
     {
