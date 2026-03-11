@@ -30,19 +30,41 @@ StudentWrapper& Class::getStudentWrapper(const std::string& studentId) {
 
 double Class::getHighestScore() {
     // TODO implement getHighestScore
-    return 0.0;
+    double highest = -1.0; // Invalid Score
+    for (std::vector<StudentWrapper>::iterator it = students.begin() ; 
+        it != students.end(); ++it) {
+        if (it->getScore() > highest)
+            highest = it->getScore();
+    }
+    return highest;
 }
 
 double Class::getLowestScore() {
     // TODO implement getLowestScore
-    return 0.0;
+    double lowest = 101.0; // Invalid Score
+    for (std::vector<StudentWrapper>::iterator it = students.begin(); it != students.end(); ++it) {
+        if (it->getScore() < lowest)
+            lowest = it->getScore();
+    }
+    return lowest;
 }
 
 double Class::getAvgScore() {
     // TODO implement getAvgScore
+    double totalScore = 0.0;
+    int count = 0;
+    for (std::vector<StudentWrapper>::iterator it = students.begin(); it != students.end(); ++it) {
+        if (it->getScore() >= 0) { // Only consider valid scores
+            totalScore += it->getScore();
+            count++;
+        }
+    }    
+    if (count > 0)
+        return totalScore / count;
     return 0.0;
 }
 
 void Class::saveScore(const std::string& filename) {
     // TODO implement saveScore
+    
 }
