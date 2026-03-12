@@ -94,6 +94,89 @@ void AppX::loadFiles()
 
     // TODO: load data from ./Classes.txt and push objects to the vector.
     // Hint: how is student information read?
+
+    // Open a file as a input stream.
+    ifstream clfile("./Classes.txt");
+    if (!clfile.is_open()) {
+        cerr << "Error: Cannot open Classes.txt" << endl;
+        exit(1);
+    }
+
+    // The lineBuf vector stores each line in the file, except empty lines and comment lines , to be processed later.
+    vector<string> lines;
+    while (getline(clfile, line)) {
+        if (lines.empty() || line[0] == '#')
+            continue;
+        lines.push_back(line);
+    }
+    clfile.close();
+
+    // Process each line in lineBuf to create Class objects and add them to classVec.
+    size_t idx = 0;
+    while (idx < lines.size()) {
+        line = lines[idx];
+        
+        if (line.empty() || line[0] == '#') {
+            idx ++;
+            continue ;
+        }
+
+        //progress the line to get class name
+        if (idx < lines.size() && line.find("Class") == 0) {
+            idx ++;
+            clsname = line.substr(line.find(":") + 1);
+
+            //progress the line to get class point
+            line = lines[idx];
+            if (line.find("Point") == 0) {
+                idx ++;
+                point = stoi(line.substr(line.find(":") + 1));  // Convert string to int
+                
+                if (point <= 0) {
+                    cerr << "Error: Invalid point value for class " << clsname << endl;
+                    continue;
+                }
+
+                cl = new Class (clsname , point);
+
+                idx ++;
+
+                //progress the line to get student information
+                while(idx < lines.size()) {
+                    line = lines[idx];
+
+                    // If the line is empty or next class, skip it.
+                    if(line.empty() ){
+                        idx ++;
+                        continue;
+                    }
+                    if (line.find("Class") == 0) {
+                        break;
+                    }
+
+                    string studentId = line;
+                    bool found = false;
+                    for (auto &s: studentVec) {
+                        if (s->id == studentId) {
+                            cl->addStudent(*s);
+                            s->addClass(cl);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        cerr << "Error: Student with ID " << studentId << " not found for class " << clsname << endl;
+                    }
+                    idx ++;
+                }
+                classVec.push_back(cl);
+            } else {
+                cerr << "Error: Point information missing for class " << clsname << endl;
+            }
+        } else {
+            idx ++;
+        }
+    }
 }
 
 void AppX::inputScore()
