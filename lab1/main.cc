@@ -183,6 +183,52 @@ void AppX::inputScore()
 {
     // TODO: implement inputScore.
     // Hint: Take a look at printScoreStats().
+    string sbuf;
+    Class *cl;
+    while (true) {
+        cout << "Please input the class name (or input q to quit): ";
+        cin >> sbuf;
+        if (sbuf == "q")
+            break;
+
+        cl = nullptr;
+        for (vector<Class*>::iterator it = classVec.begin();
+                it != classVec.end();
+                ++ it) {
+            if ((*it)->name == sbuf) {
+                cl = *it;
+                break;
+            }
+        }
+        if (cl == nullptr) {
+            cerr << "No Match Class!" << endl;
+            continue;   
+        }
+
+        while (true) {
+            cout << "Please input the student ID (or input q to quit): ";
+            cin >> sbuf;
+            if (sbuf == "q")
+                break;
+
+            StudentWrapper *sw = &(cl ->getStudentWrapper(sbuf));
+            if (sw == nullptr) {
+                cerr << "No Match Student!" << endl;
+                continue;
+            }
+
+            double score;
+            cout << "Please input the score for student " << sw->id << ": ";
+            cin >> score;
+            if (score < 0 || score > 100) {
+                cerr << "Wrong Score! Please input a score between 0 and 100." << endl;
+                continue;
+            }
+            sw->setScore(score);
+            cout << "Score updated successfully for student " << sw->id << endl;
+        }
+
+    }
 }
 
 void AppX::printScoreStats()
@@ -232,6 +278,25 @@ void AppX::printGrade()
 {
     // TODO: implement printGrade.
     // Hint: Take a look at printScoreStats().
+    cout << "Please input the student ID: ";
+    string studentId;
+    cin >> studentId;
+    Student *st = nullptr;
+    for (Student *s : studentVec) {
+        if (s->id == studentId) {
+            st = s;
+            break;
+        }
+    }
+    if (st == nullptr) {
+        cerr << "No Match Student!" << endl;
+        return;
+    }
+
+    double gpa = st -> getGpa();
+    double avgScore = st -> getAvgScore();
+    cout << st -> toString() << endl;
+    cout << setiosflags(ios::fixed) << setprecision(2) << "GPA: " << gpa << ", Average Score: " << avgScore << endl;
 }
 
 void AppX::saveScore() {
